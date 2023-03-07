@@ -14,7 +14,7 @@
     \\Server1\UserLogs\Administrator.Februari-2023.log
 
     .LINK
-    https://github.com/ncsydney/PowerShell
+    https://github.com/ncsydney/Opdrachten-Scripting
 
 #>
 

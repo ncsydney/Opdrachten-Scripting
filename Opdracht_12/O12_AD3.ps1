@@ -2,8 +2,9 @@
 Import-Module ActiveDirectory
 
 # Maakt tabel objecten van de items in CSV-bestanden door de cmdlet Import-Csv
-$Users = import-csv 'users.csv'
+$Users = import-csv "C:\data\users.csv"
 $count = 0
+$NewUsers = ""
 
 # Als het bestand 'users.csv' leeg is
 if(!($Users)){
@@ -40,13 +41,13 @@ else {
             else{
                 
                 # Maakt de nieuwe gebruikers aan
-                New-ADUser –Name $FullName –GivenName $Firstname –Surname $Lastname `
-                -DisplayName $FullName –SamAccountName $Username –HomeDrive $HomeDrive `
-                -HomeDirectory $HomeDirectory –UserPrincipalName $UPN -Path $OU `
-                -AccountPassword $SecurePassword -Enabled $true –PasswordNeverExpires $True `
+                New-ADUser -Name $FullName -GivenName $Firstname -Surname $Lastname `
+                -DisplayName $FullName -SamAccountName $Username -HomeDrive $HomeDrive `
+                -HomeDirectory $HomeDirectory -UserPrincipalName $UPN -Path $OU `
+                -AccountPassword $SecurePassword -Enabled $true -PasswordNeverExpires $true `
                 -PassThru
                 
-                Write-Host "Gebruiker [$FullName] toegevoegd aan AD" -ForegroundColor Green
+                $NewUsers += "Gebruiker [$FullName] toegevoegd aan AD`n"
 
                 # Voegt alle aangemaakte gebruikers toe aan de groep Personeel
                 Add-ADGroupMember -Identity $Group -Members $FUllName
@@ -66,7 +67,7 @@ else {
 
                 # Kijkt of de directory $HomeDirectory bestaat, zo niet, wordt de folder aangemaakt 
                 if(!(Test-Path($HomeDirectory))){
-                    New-Item –path $UserRoot –Name $Lastname -Type Directory -force
+                    New-Item "path $UserRoot "Name $Lastname -Type Directory -force
                     $ACL = Get-Acl $HomeDirectory
                     
                     $ACL.AddAccessRule($Rule)
@@ -76,10 +77,12 @@ else {
                 # Kijkt of de HomeDrive bestaat
                 $homeDir = (Get-ADUser $FullName -Properties HomeDirectory).HomeDirectory
                 if($homeDir){Write-Host "Home Directory Bestaat" -ForegroundColor Cyan} 
-                else{Write-Host "Home Directory wordt gemaakt"
+                else{Write-Host "Home Directory wordt gemaakt"}
                 Set-ADUser -Identity $FullName -HomeDirectory $HomeDirectory -HomeDrive "H:"
+
+
             }
         }
-    }
 }
+Write-Host $NewUsers -ForegroundColor Green
 pause

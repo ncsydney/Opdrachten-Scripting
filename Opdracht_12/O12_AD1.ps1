@@ -1,6 +1,7 @@
 Import-Module ActiveDirectory
 $Users = import-csv 'users.csv'
 $count = 0
+$NewUsers = ""
 
 if(!($Users)){Write-Host "Geen gebruikers gevonden in CSV-file"}
 
@@ -38,8 +39,9 @@ else {
             # Voegt alle aangemaakte gebruikers toe aan de groep Personeel
             Add-ADGroupMember -Identity $Group -Members $FUllName
             
-            Write-Host "Gebruiker [$FullName] toegevoegd aan AD" -ForegroundColor Green
+            $NewUsers += "Gebruiker [$FullName] toegevoegd aan AD`n"
         }
     }
 }
+Write-Host $NewUsers -ForegroundColor Green
 pause
