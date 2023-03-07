@@ -4,7 +4,7 @@
 ![Math Script Output](assets/MathOutput.png)
 
 ## Opdracht 6 - DeleteOldFiles
-![DelOldFiles Script Output](assets/DeleteOldFiles.PNG)
+![DelOldFiles Script Output](assets/DeleteOldFiles.png)
 
 ## Opdracht 7 - DeleteEmptyFolders
 ![DelEmptyFolders Script Output](assets/DeleteEmptyFolders.png)
