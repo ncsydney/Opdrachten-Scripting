@@ -24,3 +24,4 @@
 
 ## Opdracht 12 - ADUsers + gebruikers verwijderen uit OU
 ![AD3 Script Output](assets/AD3.png)
+![DeleteFromOU Script Output](assets/DeleteFromOU.png)
