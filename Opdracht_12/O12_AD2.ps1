@@ -1,0 +1,61 @@
+Import-Module ActiveDirectory
+$Users = import-csv 'users.csv'
+$count = 0
+
+if(!($Users)){Write-Host "Geen gebruikers gevonden in CSV-file"}
+
+else {
+    foreach($User in $Users){
+        $Group = "Personeel"
+        $Firstname = $User.GivenName
+        $Lastname = $User.Surname
+        $FullName = $Firstname+" "+$Lastname
+        $Password = $User.AccountPassword
+        $Domain = "@scripting.local"
+        $UPN = $User.UPN+$Domain
+        $OU = "OU=IT, DC=scripting, DC=local"
+        $HomeDrive = "H:"
+        $UserRoot = "\\Server1\Homedrives\"
+        $GlobalFolder = "C:\GlobalFolder\"
+        $HomeDirectory = ($UserRoot+$Lastname)
+        $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
+        $Rule = New-Object System.Security.AccessControl.FileSystemAccessRule `
+            ($Group,"Read, Write","ContainerInherit, ObjectInherit","None","Allow")
+    
+        $count += 1
+        
+        # Kijkt of de gebruiker in de AD bestaat
+        if(Get-ADUser -Filter {sAMAccountName -eq $FullName}){
+                $count = 0
+                Write-Host "Gebruiker [$FullName] bestaat al in AD" -ForegroundColor DarkRed
+        }
+        else{
+            
+            # Maakt de nieuwe gebruikers aan
+            New-ADUser –Name $FullName –GivenName $Firstname –Surname $Lastname `
+            -DisplayName $FullName –SamAccountName $Username –HomeDrive $HomeDrive `
+            -HomeDirectory $HomeDirectory –UserPrincipalName $UPN -Path $OU `
+            -AccountPassword $SecurePassword -Enabled $true –PasswordNeverExpires $True `
+            -PassThru
+            
+            # Voegt alle aangemaakte gebruikers toe aan de groep Personeel
+            Add-ADGroupMember -Identity $Group -Members $FUllName
+            
+            Write-Host "Gebruiker [$FullName] toegevoegd aan AD" -ForegroundColor Green
+
+            # Kijkt of het de folde $GlobalFolder bestaat, zo niet, wordt de folder aangemaakt 
+            if(!(Test-Path($GlobalFolder))){
+                New-Item -Path $GlobalFolder -Type Directory 
+            }
+            
+            # Als de folder $GlobalFolder bestaat, geef de groep Personeel Lees en Schrijf rechten
+            if(Test-Path($GlobalFolder)){
+                $ACL = Get-Acl $GlobalFolder
+                
+            $ACL.AddAccessRule($Rule)
+            Set-Acl $GlobalFolder $ACL
+            }
+        }
+    }
+}
+pause
