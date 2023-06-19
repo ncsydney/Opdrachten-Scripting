@@ -6,7 +6,7 @@ $count = 0
 # Itereert door alle gebruikers
 foreach($User in $AllUsers){
     $count += 1
-    Write-Host "Gevonden gebruiker [$($User | Select-Object Name)]"
+    Write-Host "Gevonden gebruiker [$($User | Select-Object -Expandproperty Name)]"
 }
 
 # Vraagt welke gebruiker je wilt verwijderen
