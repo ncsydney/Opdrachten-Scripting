@@ -3,7 +3,7 @@ $days = (Get-Date).AddDays(-30)
 
 # Zet de waarde van alle bestanden in de map data die ouder zijn dan 30 dagen gelijk aan het veriabel $OldFile
 $Path = "C:\data"
-$OldFile = Get-ChildItem -Path $Path -Recurse | Where-Object { !$_.PSIsContainer }  -and $_.CreationTime -lt $days 
+$OldFile = Get-ChildItem -Path $Path -Recurse | Where-Object { !$_.PSIsContainer -and $_.CreationTime -lt $days }
 
 $count = 0
 
@@ -32,7 +32,7 @@ if($count -gt 0 ){
     elseif($Choice -eq "Y"){
         foreach($file in $OldFile){
             $count += 1
-            Remove-Item -Recurse "$Path/$OldFile"  
+            Remove-Item -Recurse "$($file.FullName)"  
         }
 
         # Als het variabel $count niet gelijk is aan 1

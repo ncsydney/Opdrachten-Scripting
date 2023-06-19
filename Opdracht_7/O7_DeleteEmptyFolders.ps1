@@ -9,6 +9,7 @@ foreach($file in $EmptyFolder){
     $count += 1
     if(!($count -eq 0)){
         Write-Host "Lege folder - [$file]"
+        $cache += $file
     }
     else{
         Write-Host "Geen lege folders gevonden"
@@ -27,7 +28,7 @@ if($count -gt 0 ){
     elseif($Choice -eq "Y"){
         foreach($file in $EmptyFolder){
             $count += 1
-            Remove-Item -Recurse "$Path\$EmptyFolder" 
+            Remove-Item -Recurse "$($file.FullName)" 
         }
 
         # Als het variabel $count niet gelijk is aan 1
