@@ -5,9 +5,9 @@ $filename = Get-Date -Format "MMMM-yyyy"
 
 $IPAddress = Get-NetIPAddress -IPAddress 192.168.*.* | Select-Object -ExpandProperty IPAddress
 
-$str = ''
+$IPList= ''
 foreach($Add in $IPAddress) {
-    $IPList = $str += "$Add, "
+    $IPList += "$Add, "
 
 }
  $IPs = $IPList.TrimEnd(", ")
