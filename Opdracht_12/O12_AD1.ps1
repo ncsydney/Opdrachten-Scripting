@@ -1,7 +1,7 @@
 Import-Module ActiveDirectory
 $Users = import-csv 'users.csv'
 $count = 0
-$NewUsers = ""
+$NewUsers = @()
 
 if(!($Users)){Write-Host "Geen gebruikers gevonden in CSV-file"}
 
