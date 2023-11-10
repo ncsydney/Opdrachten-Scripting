@@ -4,7 +4,7 @@ Import-Module ActiveDirectory
 # Maakt tabel objecten van de items in CSV-bestanden door de cmdlet Import-Csv
 $Users = import-csv "C:\data\users.csv"
 $count = 0
-$NewUsers = ""
+$NewUsers = @()
 
 # Als het bestand 'users.csv' leeg is
 if(!($Users)){
